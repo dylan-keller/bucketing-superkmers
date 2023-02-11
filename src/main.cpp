@@ -5,7 +5,7 @@
 using namespace std;
 
 int main(int argc, char *argv[]) {
-  /*if (argc != 4) {
+  /*if (argc != 5) {
     std::cout << "Invalid arguments. Expected format is :\n"
               << "' ./main file_in rep_out k m '\n"
               << "With - file_in : path to a FASTA file\n"
@@ -15,17 +15,34 @@ int main(int argc, char *argv[]) {
               exit(1);
   }*/
 
-  ifstream fs("../../fastafiles/sequence.fasta");
-  cout << "a" << endl;
+  ifstream fs(argv[1]);
+  cout << "---------- a" << endl;
   skipFirstLine(fs);
-  cout << "b" << endl;
-  cout << read1(fs) << read1(fs) << read1(fs) << endl;
+  cout << read1(fs) << read1(fs) << read1(fs) << read1(fs) << read1(fs) << endl;
 
-  uint64_t n = 10;
-  n = n << 1;
-  cout << n << endl;
+  cout << "---------- b" << endl;
+  cout << argc << " ----- " << argv[0] << " ----- " << argv[1] << endl;
 
-  cout << convertToInt("ACTT") << endl;
+  cout << "---------- c" << endl;
+  uint64_t n1 = 10;
+  n1 = n1 << 1;
+  cout << n1 << endl;
 
+  uint64_t n2 = convertToInt("CCTT");
+
+  cout << n2 << endl;
+
+  /*cout << "---------- d" << endl;
+
+  n2 &= ~(1 << 1);
+  cout << n2 << endl;*/
+
+  cout << "---------- e" << endl;
+
+  for(int i=0; i<10; i++){
+    n2 = nextKmer(fs, n2, 4);
+    cout << n2 << endl;
+  }
+  
   return 0;
 }

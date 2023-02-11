@@ -11,7 +11,7 @@ EXEC_NAME ?= main
 LIBS :=
 
 CPP := g++
-OPTI ?= -O2 # maybe switch to O6 later
+OPTI ?= -O2 # TODO : try to switch to O6 later to see if it runs faster
 CPPFLAGS := $(OPTI) -std=c++11 -Wall -Wextra -I $(INC_DIR)
 
 CPP_FILES = $(shell find $(SRC_DIR) | grep '.cpp$$')

@@ -11,6 +11,6 @@ char read1(std::ifstream &fs) {
   char res;
   do {
     res = fs.get();
-  } while (res == 'N');
+  } while (res == 'N'); // assuming missing nucleotides are labeled "N" maybe fix by != A,C,G,T
   return res;
 }
