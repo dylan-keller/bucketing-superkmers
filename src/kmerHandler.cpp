@@ -107,11 +107,11 @@ void bestMinimiser(uint64_t *mini_and_pos, std::string kmer, uint16_t m) {
   mini_and_pos[0] = mmer_cur;
   mini_and_pos[1] = 0;
 
-  for (uint8_t i = 0; i < m; i++) {
+  for (uint8_t i = m; i < kmer.length(); i++) {
     mmer_cur = nextKmer(kmer[i], mmer_cur, m);
     if (mmer_cur < mini_and_pos[0]) {
       mini_and_pos[0] = mmer_cur;
-      mini_and_pos[1] = i;
+      mini_and_pos[1] = i-m+1;
     }
   }
 }
