@@ -101,3 +101,17 @@ uint64_t nextKmer(std::ifstream &fs, uint64_t prev, uint8_t k) {
   char c = read1(fs);
   return nextKmer(c, prev, k);
 }
+
+void bestMinimiser(uint64_t *mini_and_pos, std::string kmer, uint16_t m) {
+  uint64_t mmer_cur = convertToInt(kmer.substr(0, m));
+  mini_and_pos[0] = mmer_cur;
+  mini_and_pos[1] = 0;
+
+  for (uint8_t i = 0; i < m; i++) {
+    mmer_cur = nextKmer(kmer[i], mmer_cur, m);
+    if (mmer_cur < mini_and_pos[0]) {
+      mini_and_pos[0] = mmer_cur;
+      mini_and_pos[1] = i;
+    }
+  }
+}
