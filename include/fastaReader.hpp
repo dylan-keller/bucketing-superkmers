@@ -4,7 +4,7 @@
 #include <fstream>
 #include <string>
 
-void skipFirstLine(std::ifstream& fs);
+bool skipFirstLine(std::ifstream& fs);
 
 char read1(std::ifstream& fs);
 
