@@ -20,10 +20,10 @@ int main(int argc, char *argv[]) {
     invalid_message_exit();
   }
 
-  uint64_t k = atoi(argv[3]);
-  uint64_t m = atoi(argv[4]);
+  uint16_t k = (uint16_t)atoi(argv[3]);
+  uint16_t m = (uint16_t)atoi(argv[4]);
 
-  if ((k==0) || (m==0) || (m>=k)) {
+  if ((k<=0) || (k>31) || (m<=0) || (m>=k)) {
     std::cout << "FAILED : Invalid parameters for k or m. ";
     invalid_message_exit();
   }
@@ -36,6 +36,74 @@ int main(int argc, char *argv[]) {
   }
 
   
+  ofstream outf;
+  outf.open(argv[2]);
+
+  string s = "";
+  char c;
+  uint16_t mmer_pos;
+  uint64_t mmer_mini=0;
+  uint64_t mmer_cur=0;
+  uint64_t kmer_cur=0;
+
+  s += read1(fs);
+
+  for(int w=0; w<100; w++){
+    mmer_pos = 0;
+
+    for(uint16_t i=1; i<k; i++){
+      c = read1(fs);
+      s += c;
+
+      // TODO : put if (i>m-1) else if (i==m-1) faster
+
+      if (i>=m-1){
+        if (i==m-1){
+          mmer_mini = convertToInt(s);
+          mmer_cur = mmer_mini;
+        } else {
+          mmer_cur = nextKmer(c, mmer_cur, m);
+          if (mmer_cur < mmer_mini) {
+            mmer_pos = i-m+1;
+            mmer_mini = mmer_cur;
+          }
+        }
+      }
+    }
+    kmer_cur = convertToInt(s);
+    cout << s;
+    cout << " pos:" << mmer_pos << " mini:" << mmer_mini << endl; //debugging
+
+    outf << s;
+    s="";
+
+    c = read1(fs);
+    
+    while (mmer_pos>0){
+      kmer_cur = nextKmer(c, kmer_cur, k); 
+      mmer_cur = nextKmer(c, mmer_cur, m);
+      mmer_pos--;
+
+      if (mmer_cur < mmer_mini) {
+        outf << s << "\n";
+        outf << convertToString(kmer_cur, k);
+        s = "";
+        mmer_mini = mmer_cur;
+        mmer_pos=0;
+      }
+
+      s += c;
+
+      c = read1(fs);
+    }
+    
+
+
+  }
+  
+  
+  // OLD TESTS
+
   /*
   cout << "---------- a" << endl;
   skipFirstLine(fs);
@@ -66,5 +134,7 @@ int main(int argc, char *argv[]) {
   }
   */
 
+  fs.close();
+  outf.close();
   return 0;
 }

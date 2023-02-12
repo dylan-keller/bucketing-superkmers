@@ -1,10 +1,13 @@
 #include "kmerHandler.hpp"
 
-uint8_t convertToInt(char c){
-  switch(c){
-    case 'C' : return 1;
-    case 'T' : return 2;
-    case 'G' : return 3;
+uint8_t convertToInt(char c) {
+  switch (c) {
+  case 'C':
+    return 1;
+  case 'T':
+    return 2;
+  case 'G':
+    return 3;
   }
   return 0;
 }
@@ -32,21 +35,48 @@ uint64_t convertToInt(std::string s) {
   return res;
 }
 
-uint64_t nextKmer(std::ifstream &fs, uint64_t prev, uint8_t k) {
-  // first we read the next char in the file
-  char c = read1(fs);
+std::string convertToString(u_int64_t kmer, uint8_t k) {
+  std::string res = "";
+  char c;
 
-  // then we shift left twice the previous kmer
-  uint64_t res = prev << 2;
+  for (uint8_t i = 0; i < k; i++) {
+    switch (kmer % 4) {
+    case 0:
+      c = 'A';
+      break;
+    case 1:
+      c = 'C';
+      break;
+    case 2:
+      c = 'T';
+      break;
+    case 3:
+      c = 'G';
+      break;
+    }
+    res.insert(res.begin(), c);
 
-  // then we erase the k*2 and k*2+1 bits
-  res &= ~(1 << k * 2);
-  res &= ~(1 << ((k * 2) + 1));
+    kmer = kmer >> 2;
+  }
 
-  // finally we add the number corresponding to the read letter
+  return res;
+}
 
-  // TODO : replace code here with convertToInt(char c) and see if faster
+uint64_t nextKmer(char c, uint64_t prev, uint8_t k) {
+  // first, we take the previous kmer.
+  uint64_t res = prev;
 
+  // we erase the 2k-2th and 2k-1th bits.
+  // this is equivalent to erasing the leftmost letter.
+  res &= ~(1UL << (k - 1) * 2);
+  res &= ~(1UL << ((k * 2) - 1));
+
+  // then we shift left twice.
+  // this is equivalent to moving all the letters left once.
+  res = res << 2;
+
+  // finally we add the number corresponding to the new letter.
+  // this is equivalent to adding the new letter on the right.
   switch (c) {
   case 'C':
     res += 1;
@@ -59,7 +89,15 @@ uint64_t nextKmer(std::ifstream &fs, uint64_t prev, uint8_t k) {
     break;
   };
 
-  // TODO : case EOF. is exit(0) acceptable ? by the time we reach EOF we got all mmers
+  // TODO : replace code here with convertToInt(char c) and see if faster
+
+  // TODO : case EOF. is exit(0) acceptable ? by the time we reach EOF we got
+  // all mmers
 
   return res;
+}
+
+uint64_t nextKmer(std::ifstream &fs, uint64_t prev, uint8_t k) {
+  char c = read1(fs);
+  return nextKmer(c, prev, k);
 }
