@@ -2,39 +2,39 @@
 
 C++ implementation of a superkmer bucketing tool for an intern test from https://github.com/yoann-dufresne/buckettingtest
 
-# Utilisation 
+# Use 
 
-## Compilation
+## Compiling
 
-Pour compiler une première fois veuillez utiliser la commande :
+To compile a first time :
 ```
 make
 ```
 
-Pour nettoyer le dossier et supprimer tous les fichiers compilés :
+To clean up the repository and delete all compiled files :
 ```
 make clean
 ```
 
-## Execution
+## Executing
 
-Pour utiliser le programme voici la syntaxe à suivre :
+To use the program :
 ```
 ./main file_in rep_out k m
 ```
-Avec : 
-- file_in : fichier au format FASTA
-- rep_out : chemin vers un répertoire où seront stockées les sorties
-- k : un entier inférieur ou égal à 31
-- m : un entier inférieur à k représentant la taille des minimiseurs
+With : 
+- file_in : file in FASTA format
+- rep_out : path to a repository where the output will be saved
+- k : integer smaller or equal to 31
+- m : integer smaller than k representing the size of the minimisers
 
-Par exemple : 
-```
+For example : 
+```c
 ./main ../fastafiles/sequence.fasta ../fastafiles/ 31 20
-# ou
+// or
 ./main data/ecoli.fasta data/ecoli_out/ 31 13
 ```
 
-## Résultat
+## Result
 
-En sortie, un fichier `superkmer_buckets.txt` dans le répertoire donné en paramètre, contenant un superkmer par ligne.
+Output is a file titled `superkmer_buckets.txt` saved in the given repository, containing one superkmer per line.
