@@ -15,8 +15,6 @@ uint8_t convertToInt(char c) {
 uint64_t convertToInt(std::string s) {
   uint64_t res = 0;
 
-  // TODO : replace code here with convertToInt(char c) and see if faster
-
   for (char &c : s) {
     res = res << 2; // NOTE : yes, first shift is unecessary.
     switch (c) {
@@ -89,11 +87,6 @@ uint64_t nextKmer(char c, uint64_t prev, uint8_t k) {
     break;
   };
 
-  // TODO : replace code here with convertToInt(char c) and see if faster
-
-  // TODO : case EOF. is exit(0) acceptable ? by the time we reach EOF we got
-  // all mmers
-
   return res;
 }
 
@@ -103,14 +96,18 @@ uint64_t nextKmer(std::ifstream &fs, uint64_t prev, uint8_t k) {
 }
 
 void bestMinimiser(uint64_t *mini_and_pos, std::string kmer, uint16_t m) {
+  // we'll take the very first mmer as the potential minimser for now.
   uint64_t mmer_cur = convertToInt(kmer.substr(0, m));
   mini_and_pos[0] = mmer_cur;
   mini_and_pos[1] = 0;
 
+  // now, we'll compare all mmers and keep the minimser.
   for (uint8_t i = m; i < kmer.length(); i++) {
     mmer_cur = nextKmer(kmer[i], mmer_cur, m);
     if (mmer_cur < mini_and_pos[0]) {
+      // we'll return the minimser,
       mini_and_pos[0] = mmer_cur;
+      // and its position in the kmer.
       mini_and_pos[1] = i-m+1;
     }
   }

@@ -8,7 +8,7 @@ void invalid_message_exit() {
   std::cout << "Expected format is :\n\n"
             << "./main file_in rep_out k m\n\n"
             << "With - file_in : path to a FASTA file\n"
-            << "     - file_out : path to a repository where the outputs will be stocked\n"
+            << "     - file_out : path to a repository where the output will be stocked\n"
             << "     - k : k-mer size, integer <= 31\n"
             << "     - m : minimizer size, integer < k\n";
   exit(1);
@@ -35,8 +35,10 @@ int main(int argc, char *argv[]) {
     invalid_message_exit();
   }
 
+  string out = argv[2];
+  out += "superkmer_buckets.txt";
   ofstream outf;
-  outf.open(argv[2]);
+  outf.open(out);
 
   string s = "";
   char c;
@@ -73,10 +75,6 @@ int main(int argc, char *argv[]) {
     kmer_cur = convertToInt(s);
     // the very first kmer is always going to be at the beginning of the file.
     outf << s;   
-
-    // TODO : remove debugging
-    //cout << s;
-    //cout << " pos:" << mmer_pos << " mini:" << mmer_mini << endl; //debugging
 
     // now, we will use the s variable to add text in the output file.
     // let's clear it since we already wrote the first kmer into the file.
@@ -131,6 +129,7 @@ int main(int argc, char *argv[]) {
 
       c = read1(fs);
     }
+  outf << s;
  
   fs.close();
   outf.close();
